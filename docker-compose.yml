@@ -1,0 +1,39 @@
+version: "3"
+
+volumes:
+  guistorage:
+    name: ${GUI_DATA_VOLUME:-pg-gui-data}
+  dbstorage:
+    name: ${DB_DATA_VOLUME:-pg-db-data}
+
+services:
+  db:
+    image: postgres:${DB_TAG:-15.1}
+    restart: unless-stopped
+    ports:
+      - ${DB_PORT:-5432}:5432
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+      - dbstorage:/var/lib/postgresql/data
+  admin:
+    image: dpage/pgadmin4:${GUI_TAG:-6.15}
+    restart: unless-stopped
+    ports:
+      - ${GUI_PORT:-80}:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${ADMIN_MAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${ADMIN_PASSWORD}
+    volumes:
+      - guistorage:/var/lib/pgadmin
+  php:
+    build: php8
+    container_name: php8_cda
+    ports:
+      - "8082:80"
+    volumes:
+      - ${ENVIRONMENT_ROOT}/vhosts:/etc/apache2/sites-enabled
+      - ${ENVIRONMENT_ROOT}/api:/var/www
