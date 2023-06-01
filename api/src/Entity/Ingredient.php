@@ -14,9 +14,9 @@ class Ingredient
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $naÃme = null;
+    private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -26,24 +26,21 @@ class Ingredient
     private ?bool $is_public = null;
 
     #[ORM\Column]
-    private ?float $alcohol_content = null;
-
-    #[ORM\Column]
-    private ?int $creator_id = null;
+    private ?int $alcohol_content = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getNaÃme(): ?string
+    public function getName(): ?string
     {
-        return $this->naÃme;
+        return $this->name;
     }
 
-    public function setNaÃme(string $naÃme): self
+    public function setName(string $name): self
     {
-        $this->naÃme = $naÃme;
+        $this->name = $name;
 
         return $this;
     }
@@ -53,7 +50,7 @@ class Ingredient
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
@@ -84,26 +81,14 @@ class Ingredient
         return $this;
     }
 
-    public function getAlcoholContent(): ?float
+    public function getAlcoholContent(): ?int
     {
         return $this->alcohol_content;
     }
 
-    public function setAlcoholContent(float $alcohol_content): self
+    public function setAlcoholContent(int $alcohol_content): self
     {
         $this->alcohol_content = $alcohol_content;
-
-        return $this;
-    }
-
-    public function getCreatorId(): ?int
-    {
-        return $this->creator_id;
-    }
-
-    public function setCreatorId(int $creator_id): self
-    {
-        $this->creator_id = $creator_id;
 
         return $this;
     }
